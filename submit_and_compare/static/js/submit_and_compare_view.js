@@ -12,6 +12,8 @@ function SubmitAndCompareXBlockInitView(runtime, element) {
     var reset_button = $element.find('.reset_button');
 
     var problem_progress = $element.find('.problem_progress');
+    var used_attempts_feedback = $element.find('.used_attempts_feedback');
+    var button_holder = $element.find('.button_holder');
     var question_prompt = $element.find('.question_prompt');
     var answer_textarea = $element.find('.answer');
     var your_answer = $element.find('.your_answer');
@@ -50,7 +52,9 @@ function SubmitAndCompareXBlockInitView(runtime, element) {
 
 	function post_submit(result) {
         $('body').data(cached_answer_id, $('.answer',element).val());
-        problem_progress.text('(' + result.problem_progress + ')')
+        problem_progress.text('(' + result.problem_progress + ')');
+        button_holder.addClass(result.submit_class);
+        used_attempts_feedback.text(result.used_attempts_feedback);
 	}
 	
 	function set_hints(result) {
@@ -99,7 +103,12 @@ function SubmitAndCompareXBlockInitView(runtime, element) {
         $.ajax({
             type: 'POST',
             url: handlerUrl,
-            data: JSON.stringify({'answer': $('.answer',element).val() }),
+            data: JSON.stringify(
+                {
+                    'answer': $('.answer',element).val(),
+                    'action': 'submit'
+                }
+            ),
             success: post_submit
         });
         show_answer();
@@ -110,7 +119,12 @@ function SubmitAndCompareXBlockInitView(runtime, element) {
         $.ajax({
             type: 'POST',
             url: handlerUrl,
-            data: JSON.stringify({'answer': '' }),
+            data: JSON.stringify(
+                {
+                    'answer': '',
+                    'action': 'reset'
+                }
+            ),
             success: post_submit
         });
         reset_answer();

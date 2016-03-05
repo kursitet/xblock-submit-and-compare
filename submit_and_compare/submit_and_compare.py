@@ -38,6 +38,16 @@ class SubmitAndCompareXBlock(XBlock):
         help='This is the student\'s answer to the question',
     )
 
+    max_attempts = Integer(
+        default=0,
+        scope=Scope.settings,
+    )
+
+    count_attempts = Integer(
+        default=0,
+        scope=Scope.user_state,
+    )
+
     your_answer_label = String(
         default='Your Answer:',
         scope=Scope.settings,
@@ -104,6 +114,8 @@ class SubmitAndCompareXBlock(XBlock):
         when viewing courses.
         '''
         problem_progress = self._get_problem_progress()
+        used_attempts_feedback = self._get_used_attempts_feedback()
+        submit_class = self._get_submit_class()
         prompt = self._get_body(self.question_string)
         explanation = self._get_explanation(self.question_string)
 
@@ -113,6 +125,8 @@ class SubmitAndCompareXBlock(XBlock):
             html.format(
                 display_name=self.display_name,
                 problem_progress=problem_progress,
+                used_attempts_feedback=used_attempts_feedback,
+                submit_class=submit_class,
                 prompt=prompt,
                 student_answer=self.student_answer,
                 explanation=explanation,
@@ -135,6 +149,7 @@ class SubmitAndCompareXBlock(XBlock):
         context = {
             'display_name': self.display_name,
             'weight': self.weight,
+            'max_attempts': self.max_attempts,
             'xml_data': self.question_string,
             'your_answer_label': self.your_answer_label,
             'our_answer_label': self.our_answer_label,
@@ -152,7 +167,16 @@ class SubmitAndCompareXBlock(XBlock):
         '''
         Save student answer
         '''
+        if self.max_attempts > 0 and self.count_attempts >= self.max_attempts:
+            raise StandardError('User has already exceeded the maximum number of allowed attempts')
+
         self.student_answer = submissions['answer']
+
+        if submissions['action'] == 'submit':
+            if self.max_attempts == 0:
+                self.count_attempts = 1
+            else:
+                self.count_attempts += 1
 
         if self.student_answer:
             self.score = self.weight
@@ -163,6 +187,8 @@ class SubmitAndCompareXBlock(XBlock):
         result = {
             'success': True,
             'problem_progress': self._get_problem_progress(),
+            'submit_class': self._get_submit_class(),
+            'used_attempts_feedback': self._get_used_attempts_feedback(),
         }
         return result
 
@@ -171,13 +197,14 @@ class SubmitAndCompareXBlock(XBlock):
         '''
         Save studio edits
         '''
+        print submissions
         self.display_name = submissions['display_name']
-        try:
-            weight = int(submissions['weight'])
-        except ValueError:
-            weight = 0
+        weight = self._get_natural_number(submissions['weight'])
         if weight > 0:
             self.weight = weight
+        max_attempts = self._get_natural_number(submissions['max_attempts'])
+        if max_attempts > 0:
+            self.max_attempts = max_attempts
         self.your_answer_label = submissions['your_answer_label']
         self.our_answer_label = submissions['our_answer_label']
         self.submit_button_label = submissions['submit_button_label']
@@ -282,6 +309,39 @@ class SubmitAndCompareXBlock(XBlock):
             # workaround for xblock workbench
             unique_id = 'workbench-workaround-id'
         return unique_id
+
+    def _get_natural_number(self, value_string):
+        try:
+            value = int(value_string)
+        except ValueError:
+            value = 0
+        return value
+
+    def _get_used_attempts_feedback(self):
+        """
+        Returns the text with feedback to the user about the number of attempts
+        they have used if applicable
+        """
+        result = ''
+        if self.max_attempts > 0:
+            result = ungettext(
+                'You have used {count_attempts} of {max_attempts} submission',
+                'You have used {count_attempts} of {max_attempts} submissions',
+                self.max_attempts,
+            ).format(
+                count_attempts=self.count_attempts,
+                max_attempts=self.max_attempts,
+            )
+        return result
+
+    def _get_submit_class(self):
+        """
+        Returns the css class for the submit button
+        """
+        result = ''
+        if self.max_attempts > 0 and self.count_attempts >= self.max_attempts:
+            result = 'nodisplay'
+        return result
 
     def _get_problem_progress(self):
         """
