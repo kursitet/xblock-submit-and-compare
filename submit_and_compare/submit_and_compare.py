@@ -29,7 +29,10 @@ class SubmitAndCompareXBlock(XBlock):
         display_name='Display Name',
         default='Submit and Compare',
         scope=Scope.settings,
-        help='This name appears in the horizontal navigation at the top of the page',
+        help=(
+            'This name appears in the horizontal'
+            ' navigation at the top of the page'
+        ),
     )
 
     student_answer = String(
@@ -78,14 +81,33 @@ class SubmitAndCompareXBlock(XBlock):
         default=textwrap.dedent('''
             <submit_and_compare schema_version='1'>
                 <body>
-                    <p>Before you begin the simulation, think for a minute about your hypothesis.  What do you expect the outcome of the simulation will be?  What data do you need to gather in order to prove or disprove your hypothesis?</p>
+                    <p>
+                        Before you begin the simulation,
+                        think for a minute about your hypothesis.
+                        What do you expect the outcome of the simulation
+                        will be?  What data do you need to gather in order
+                        to prove or disprove your hypothesis?
+                    </p>
                 </body>
                 <explanation>
-                    <p>We would expect the simulation to show that there is no difference between the two scenarios.  Relevant data to gather would include time and temperature.</p>
+                    <p>
+                        We would expect the simulation to show that
+                        there is no difference between the two scenarios.
+                        Relevant data to gather would include time and
+                        temperature.
+                    </p>
                 </explanation>
                 <demandhint>
-                    <hint>A hypothesis is a proposed explanation for a phenomenon.  In this case, the hypothesis is what we think the simulation will show.</hint>
-                    <hint>Once you've decided on your hypothesis, which data would help you determine if that hypothesis is correct or incorrect?</hint>
+                    <hint>
+                        A hypothesis is a proposed explanation for a
+                        phenomenon. In this case, the hypothesis is what
+                        we think the simulation will show.
+                    </hint>
+                    <hint>
+                        Once you've decided on your hypothesis, which data
+                        would help you determine if that hypothesis is
+                        correct or incorrect?
+                    </hint>
                 </demandhint>
             </submit_and_compare>
         '''))
@@ -137,7 +159,9 @@ class SubmitAndCompareXBlock(XBlock):
             )
         )
         frag.add_css(self.resource_string('static/css/submit_and_compare.css'))
-        frag.add_javascript(self.resource_string('static/js/submit_and_compare_view.js'))
+        frag.add_javascript(
+            self.resource_string('static/js/submit_and_compare_view.js'),
+        )
         frag.initialize_js('SubmitAndCompareXBlockInitView')
         return frag
 
@@ -155,10 +179,15 @@ class SubmitAndCompareXBlock(XBlock):
             'our_answer_label': self.our_answer_label,
             'submit_button_label': self.submit_button_label,
         }
-        html = self.render_template('static/html/submit_and_compare_edit.html', context)
+        html = self.render_template(
+            'static/html/submit_and_compare_edit.html',
+            context,
+        )
 
         frag = Fragment(html)
-        frag.add_javascript(self.load_resource('static/js/submit_and_compare_edit.js'))
+        frag.add_javascript(
+            self.load_resource('static/js/submit_and_compare_edit.js'),
+        )
         frag.initialize_js('SubmitAndCompareXBlockInitEdit')
         return frag
 
@@ -168,7 +197,10 @@ class SubmitAndCompareXBlock(XBlock):
         Save student answer
         '''
         if self.max_attempts > 0 and self.count_attempts >= self.max_attempts:
-            raise StandardError('User has already exceeded the maximum number of allowed attempts')
+            raise StandardError(
+                'User has already exceeded the maximum'
+                ' number of allowed attempts',
+            )
 
         self.student_answer = submissions['answer']
 
@@ -254,7 +286,10 @@ class SubmitAndCompareXBlock(XBlock):
         try:
             event_type = data.pop('event_type')
         except KeyError:
-            return {'result': 'error', 'message': 'Missing event_type in JSON data'}
+            return {
+                'result': 'error',
+                'message': 'Missing event_type in JSON data',
+            }
 
         data['user_id'] = self.scope_ids.user_id
         data['component_id'] = self._get_unique_id()
@@ -269,7 +304,10 @@ class SubmitAndCompareXBlock(XBlock):
         '''
         Gets the content of a resource
         '''
-        resource_content = pkg_resources.resource_string(__name__, resource_path)
+        resource_content = pkg_resources.resource_string(
+            __name__,
+            resource_path,
+        )
         return unicode(resource_content)
 
     def render_template(self, template_path, context={}):
