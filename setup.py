@@ -39,12 +39,12 @@ setup(
     description='Submit and Compare XBlock for self assessment',
     packages=[
         'submit_and_compare',
+    ],
+    install_requires=[
         'edx-opaque-keys',
         'mock',
         'django_nose>=1.4',
         'Django==1.4',
-    ],
-    install_requires=[
         'XBlock',
     ],
     entry_points={
