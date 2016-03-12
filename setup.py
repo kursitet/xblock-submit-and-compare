@@ -41,10 +41,6 @@ setup(
         'submit_and_compare',
     ],
     install_requires=[
-        'edx-opaque-keys',
-        'mock',
-        'django_nose>=1.4',
-        'Django==1.4',
         'XBlock',
     ],
     entry_points={
