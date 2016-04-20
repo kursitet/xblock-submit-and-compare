@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''  Submit and Compare XBlock main Python class'''
 
 import pkg_resources
@@ -26,43 +27,44 @@ class SubmitAndCompareXBlock(XBlock):
     Fields
     '''
     display_name = String(
-        display_name='Display Name',
-        default='Submit and Compare',
+        display_name=u'Отображаемое имя',
+        default=u'Ответить и сравнить',
         scope=Scope.settings,
-        help='This name appears in the horizontal navigation at the top of the page')
+        help=u'Это название отображается в горизонтальной навигационной панели в верхней части страницы.'
+    )
 
     student_answer = String(
         default='',
         scope=Scope.user_state,
-        help='This is the student\'s answer to the question',
+        help=u'Ответ студента на вопрос',
     )
 
     your_answer_label = String(
-        default='Your Answer:',
+        default=u'Ваш ответ:',
         scope=Scope.settings,
-        help='Label for the text area containing the student\'s answer',
+        help=u'Заголовок для ответа студента',
     )
 
     our_answer_label = String(
-        default='Our Answer:',
+        default=u'Эталонный ответ:',
         scope=Scope.settings,
-        help='Label for the \'expert\' answer',
+        help=u'Заголовок для ответа преподавателя',
     )
 
     submit_button_label = String(
         default='Submit and Compare',
         scope=Scope.settings,
-        help='Label for the submit button',
+        help=u'Текст на кнопке отправки ответа',
     )
 
     hints = List(
         default=[],
         scope=Scope.content,
-        help='Hints for the question',
+        help=u'Подсказка для этого вопроса',
     )
 
     question_string = String(
-        help='Default question content ',
+        help=u'Содержимое вопроса',
         scope=Scope.content,
         default=textwrap.dedent('''
             <submit_and_compare schema_version='1'>
@@ -85,9 +87,8 @@ class SubmitAndCompareXBlock(XBlock):
     )
 
     weight = Integer(
-        display_name='Weight',
-        help='This assigns an integer value representing '
-             'the weight of this problem',
+        display_name=u'Вес задания',
+        help=u'Определяет количество баллов за каждое задание. '
         default=1,
         scope=Scope.settings,
     )
@@ -199,11 +200,11 @@ class SubmitAndCompareXBlock(XBlock):
         decorated_hints = list()
 
         if len(raw_hints) == 1:
-            hint = u'Hint: ' + etree.tostring(raw_hints[0], encoding='unicode')
+            hint = u'Подсказка: ' + etree.tostring(raw_hints[0], encoding='unicode')
             decorated_hints.append(hint)
         else:
             for i in range(len(raw_hints)):
-                hint = u'Hint ({number} of {total}): {hint}'.format(
+                hint = u'Подсказка ({number} из {total}): {hint}'.format(
                     number=i + 1,
                     total=len(raw_hints),
                     hint=etree.tostring(raw_hints[i], encoding='unicode'))
