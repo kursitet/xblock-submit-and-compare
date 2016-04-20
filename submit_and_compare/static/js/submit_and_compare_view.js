@@ -1,12 +1,12 @@
 /* Javascript for submitcompareXBlock. */
 function SubmitAndCompareXBlockInitView(runtime, element) {
-    
+
     var handlerUrl = runtime.handlerUrl(element, 'student_submit');
     var hintUrl = runtime.handlerUrl(element, 'send_hints');
 	var publishUrl = runtime.handlerUrl(element, 'publish_event');
 
 	var $element = $(element);
-	
+
     var submit_button = $element.find('.submit_button');
     var hint_button = $element.find('hint_button');
     var reset_button = $element.find('.reset_button');
@@ -19,11 +19,11 @@ function SubmitAndCompareXBlockInitView(runtime, element) {
     var hint_div = $element.find('.hint');
     var hint_button_holder = $element.find('.hint_button_holder');
     var submit_button_label = $element.find('.submit_button').attr('value');
-        
+
     var hint;
     var hints;
     var hint_counter = 0;
-	
+
     var cached_answer_id = question_prompt.parent().parent().attr('data-usage-id') + '_cached_answer';
     if ($('body').data(cached_answer_id) !== undefined) {
         answer_textarea.text($('body').data(cached_answer_id));
@@ -52,7 +52,7 @@ function SubmitAndCompareXBlockInitView(runtime, element) {
         $('body').data(cached_answer_id, $('.answer',element).val());
         problem_progress.text('(' + result.problem_progress + ')')
 	}
-	
+
 	function set_hints(result) {
 		hints = result.hints;
 		if (hints.length > 0) {
@@ -64,8 +64,8 @@ function SubmitAndCompareXBlockInitView(runtime, element) {
     function show_answer() {
 		your_answer.css('display','block');
 		expert_answer.css('display','block');
-		submit_button.val('Resubmit');
-       
+		submit_button.val('Пересдать');
+
     }
 
     function reset_answer() {
@@ -116,15 +116,13 @@ function SubmitAndCompareXBlockInitView(runtime, element) {
         reset_answer();
         reset_hint();
 	});
-	
+
     $('.hint_button', element).click(function(eventObject) {
         show_hint();
 	});
-	
+
 	if ($('.answer',element).val() != '') {
 		show_answer();
 	}
-	
+
 }
-
-
