@@ -88,7 +88,7 @@ class SubmitAndCompareXBlock(XBlock):
 
     weight = Integer(
         display_name=u'Вес задания',
-        help=u'Определяет количество баллов за каждое задание. '
+        help=u'Определяет количество баллов за каждое задание.',
         default=1,
         scope=Scope.settings,
     )
