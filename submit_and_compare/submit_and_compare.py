@@ -46,13 +46,13 @@ class SubmitAndCompareXBlock(XBlock):
     )
 
     our_answer_label = String(
-        default=u'Эталонный ответ:',
+        default=u'Ответ преподавателя:',
         scope=Scope.settings,
         help=u'Заголовок для ответа преподавателя',
     )
 
     submit_button_label = String(
-        default='Submit and Compare',
+        default=u'Ответить и сравнить',
         scope=Scope.settings,
         help=u'Текст на кнопке отправки ответа',
     )
