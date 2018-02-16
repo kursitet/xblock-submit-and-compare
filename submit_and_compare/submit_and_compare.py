@@ -3,6 +3,8 @@
 Submit and Compare XBlock main Python class
 """
 
+from __future__ import unicode_literals
+
 from StringIO import StringIO
 
 import textwrap
@@ -93,16 +95,16 @@ class SubmitAndCompareXBlock(XBlock):
     Fields
     """
     display_name = String(
-        display_name=u'Отображаемое имя',
-        default=u'Ответить и сравнить',
+        display_name='Отображаемое имя',
+        default='Ответить и сравнить',
         scope=Scope.settings,
-        help=(u'Это название отображается в горизонтальной навигационной панели в верхней части страницы.'),
+        help=('Это название отображается в горизонтальной навигационной панели в верхней части страницы.'),
     )
 
     student_answer = String(
         default='',
         scope=Scope.user_state,
-        help=u'Ответ студента на вопрос',
+        help='Ответ студента на вопрос',
     )
 
     max_attempts = Integer(
@@ -116,31 +118,31 @@ class SubmitAndCompareXBlock(XBlock):
     )
 
     your_answer_label = String(
-        default=u'Ваш ответ:',
+        default='Ваш ответ:',
         scope=Scope.settings,
-        help=u'Заголовок для ответа студента',
+        help='Заголовок для ответа студента',
     )
 
     our_answer_label = String(
-        default=u'Ответ преподавателя:',
+        default='Ответ преподавателя:',
         scope=Scope.settings,
-        help=u'Заголовок для ответа преподавателя',
+        help='Заголовок для ответа преподавателя',
     )
 
     submit_button_label = String(
-        default=u'Ответить и сравнить',
+        default='Ответить и сравнить',
         scope=Scope.settings,
-        help=u'Текст на кнопке отправки ответа',
+        help='Текст на кнопке отправки ответа',
     )
 
     hints = List(
         default=[],
         scope=Scope.content,
-        help=u'Подсказка для этого вопроса',
+        help='Подсказка для этого вопроса',
     )
 
     question_string = String(
-        help=u'Содержимое вопроса',
+        help='Содержимое вопроса',
         scope=Scope.content,
         default=textwrap.dedent("""
             <submit_and_compare schema_version='1'>
@@ -182,8 +184,8 @@ class SubmitAndCompareXBlock(XBlock):
     )
 
     weight = Integer(
-        display_name=u'Вес задания',
-        help=u'Определяет количество баллов за каждое задание.',
+        display_name='Вес задания',
+        help='Определяет количество баллов за каждое задание.',
         default=0,
         scope=Scope.settings,
     )
@@ -362,7 +364,7 @@ class SubmitAndCompareXBlock(XBlock):
         decorated_hints = list()
         total_hints = len(raw_hints)
         for i, raw_hint in enumerate(raw_hints, 1):
-            hint = u'Подсказка ({number} из {total}): {hint}'.format(
+            hint = 'Подсказка ({number} из {total}): {hint}'.format(
                 number=i,
                 total=total_hints,
                 hint=etree.tostring(raw_hint, encoding='unicode'),
@@ -410,8 +412,8 @@ class SubmitAndCompareXBlock(XBlock):
         result = ''
         if self.max_attempts > 0:
             result = ungettext(
-                'You have used {count_attempts} of {max_attempts} submission',
-                'You have used {count_attempts} of {max_attempts} submissions',
+                'Вы использовали {count_attempts} попытку из {max_attempts}',
+                'Вы использовали {count_attempts} попыток из {max_attempts}',
                 self.max_attempts,
             ).format(
                 count_attempts=self.count_attempts,
@@ -438,8 +440,8 @@ class SubmitAndCompareXBlock(XBlock):
         elif self.score == 0.0:
             result = "({})".format(
                 ungettext(
-                    '{weight} point possible',
-                    '{weight} points possible',
+                    '{weight} балл возможен',
+                    '{weight} баллов возможно',
                     self.weight,
                 ).format(
                     weight=self.weight,
@@ -450,8 +452,8 @@ class SubmitAndCompareXBlock(XBlock):
             score_string = '{0:g}'.format(scaled_score)
             result = "({})".format(
                 ungettext(
-                    score_string + '/' + "{weight} point",
-                    score_string + '/' + "{weight} points",
+                    score_string + '/' + "{weight} балл",
+                    score_string + '/' + "{weight} баллов",
                     self.weight,
                 ).format(
                     weight=self.weight,
