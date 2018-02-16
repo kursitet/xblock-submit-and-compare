@@ -62,3 +62,17 @@
 .submit_and_compare .problem_header {
     display: inline-block;
 }
+
+.submit_and_compare .used_attempts_feedback {
+    margin-top: 8px;
+    color: #666;
+    font-style: italic;
+}
+
+.submit_and_compare .nodisplay {
+    display: none;
+}
+
+.submit_and_compare .inline {
+    display: inline;
+}
