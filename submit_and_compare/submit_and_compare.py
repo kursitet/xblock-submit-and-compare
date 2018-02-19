@@ -44,7 +44,7 @@ def _load_resource(resource_path):
         __name__,
         resource_path,
     )
-    return unicode(resource_content)
+    return unicode(resource_content.decode('utf8'))
 
 
 def _render_template(template_path, context):
